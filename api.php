@@ -1,8 +1,4 @@
 <?php
-error_reporting(0);
-error_reporting(E_ERROR | E_WARNING | E_PARSE);
-error_reporting(E_ALL);
-
 /**
  * 电联通信云主机API操作类
  */
@@ -16,8 +12,8 @@ class Api {
 	private $content;
 
 	function __construct() {
-		$this->api_id = '';
-		$this->api_key = '';
+		$this->api_id = 'xxxx';
+		$this->api_key = 'xxxx';
 		$this->url = 'http://yun.htuidc.com/api/';
 		$this->timestamp = time();
 	}
@@ -49,7 +45,7 @@ class Api {
 	 * @author Wending <postmaster@g000.cn>
 	 * @param  object $params $this
 	 */
-	public function setContent($params) {
+	public function setContent($params = []) {
 		$this->content = $params;
 	}
 
@@ -79,20 +75,28 @@ class Api {
 	 * 创建
 	 *
 	 * @author Wending <postmaster@g000.cn>
-	 * @return [type] [description]
+	 * @param  integer $grade 套餐级别
+	 * @param  number $days 时间：天
+	 * @param  string $os    操作系统
 	 */
-	public function add() {
-		# code...
+	public function add($grade, $days, $os) {
+		$this->setAction('add');
+		$this->setContent(compact('grade', 'days', 'os'));
+		return $this->result();
 	}
 
 	/**
 	 * 续费
 	 *
 	 * @author Wending <postmaster@g000.cn>
-	 * @return [type] [description]
+	 * @param  integer $id   主机ID
+	 * @param  number $days 时间：天
+	 * @return [type]       [description]
 	 */
-	public function renewal() {
-		# code...
+	public function renewal($id, $days) {
+		$this->setAction('renewal');
+		$this->setContent(compact('id', 'days'));
+		return $this->result();
 	}
 
 	/**
@@ -104,7 +108,7 @@ class Api {
 	 */
 	public function getHost($id) {
 		$this->setAction('getHost');
-		$this->setContent(['id' => $id]);
+		$this->setContent(compact('id'));
 		return $this->result();
 	}
 
@@ -112,20 +116,39 @@ class Api {
 	 * 开机
 	 *
 	 * @author Wending <postmaster@g000.cn>
+	 * @param  integer $id 主机ID
 	 * @return [type] [description]
 	 */
-	public function boot() {
-		# code...
+	public function On($id) {
+		$this->setAction('On');
+		$this->setContent(compact('id'));
+		return $this->result();
 	}
 
 	/**
 	 * 关机
 	 *
 	 * @author Wending <postmaster@g000.cn>
+	 * @param  integer $id 主机ID
 	 * @return [type] [description]
 	 */
-	public function shutdown() {
-		# code...
+	public function Off($id) {
+		$this->setAction('Off');
+		$this->setContent(compact('id'));
+		return $this->result();
+	}
+
+	/**
+	 * 重启
+	 *
+	 * @author Wending <postmaster@g000.cn>
+	 * @param  integer $id 主机ID
+	 * @return [type] [description]
+	 */
+	public function Reset($id) {
+		$this->setAction('Reset');
+		$this->setContent(compact('id'));
+		return $this->result();
 	}
 
 	/**
@@ -135,7 +158,7 @@ class Api {
 	 * @return [type]        [description]
 	 */
 	public function Revert() {
-		# code...
+		$this->setAction('Revert');
 	}
 
 	/**
@@ -145,48 +168,63 @@ class Api {
 	 * @return [type] [description]
 	 */
 	public function getOsList() {
-		# code...
+		$this->setAction('getOsList');
+		return $this->result();
 	}
 
 	/**
 	 * 更换系统
 	 *
 	 * @author Wending <postmaster@g000.cn>
+	 * @param  integer $id 主机ID
+	 * @param  integer $os 要更换的操作系统
 	 * @return [type] [description]
 	 */
-	public function Chos() {
-		# code...
+	public function Chos($id, $os) {
+		$this->setAction('Chos');
+		$this->setContent(compact('id', 'os'));
+		return $this->result();
 	}
 
 	/**
 	 * VNC
 	 *
 	 * @author Wending <postmaster@g000.cn>
-	 * @return [type] [description]
-	 *
+	 * @param  integer $id 主机ID
+	 * @return [type]     [description]
 	 */
-	public function getVncCode() {
-		# code...
+	public function getVncCode($id) {
+		$this->setAction('getVncCode');
+		$this->setContent(compact('id'));
+		return $this->result();
 	}
 
 	/**
 	 * 控制台
 	 *
 	 * @author Wending <postmaster@g000.cn>
-	 * @return [type] [description]
+	 * @param  integer $id       主机ID
+	 * @param  string $login_ip 客户登录IP地址
+	 * @return [type]           [description]
 	 */
-	public function getTempToken() {
-		# code...
+	public function getTempToken($id, $login_ip) {
+		$this->setAction('getTempToken');
+		$this->setContent(compact('id', 'login_ip'));
+		return $this->result();
 	}
 
 	/**
 	 * 升级
 	 *
 	 * @author Wending <postmaster@g000.cn>
-	 * @return [type] [description]
+	 * @param  integer $id        主机ID
+	 * @param  integer $new_grade 新套餐ID
+	 * @return [type]            [description]
 	 */
-	public function upgrade() {
-		# code...
+	public function upgrade($id, $new_grade) {
+		$this->setAction('upgrade');
+		$this->setContent(compact('id', 'new_grade'));
+		return $this->result();
 	}
 
 	/**
@@ -196,12 +234,15 @@ class Api {
 	 * @return [type] [description]
 	 */
 	public function result() {
-		$params = array_merge([
+		$params = [
 			'api_id' => $this->api_id,
 			'action' => $this->action,
 			'timestamp' => $this->timestamp,
 			'sign' => $this->sign(),
-		], $this->content);
+		];
+		if ($this->content) {
+			$params = array_merge($params, $this->content);
+		}
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $this->url);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -216,7 +257,9 @@ class Api {
 	}
 }
 
+// 使用方法非常简单，自己看看代码就行了
 $api = new Api();
 // $api->setAction('getPackages');
 // echo $api->result();
-echo $api->getHost('120004');
+// echo $api->getHost('120004');
+echo $api->getOsList();
