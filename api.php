@@ -16,8 +16,8 @@ class Api {
 	private $content;
 
 	function __construct() {
-		$this->api_id = '26';
-		$this->api_key = 'a01437024dd3ad5ca8a79cd7ce385e5f';
+		$this->api_id = '';
+		$this->api_key = '';
 		$this->url = 'http://yun.htuidc.com/api/';
 		$this->timestamp = time();
 	}
