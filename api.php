@@ -12,8 +12,8 @@ class Api {
 	private $content;
 
 	function __construct() {
-		$this->api_id = 'xxxx';
-		$this->api_key = 'xxxx';
+		$this->api_id = '26';
+		$this->api_key = 'a01437024dd3ad5ca8a79cd7ce385e5f';
 		$this->url = 'http://yun.htuidc.com/api/';
 		$this->timestamp = time();
 	}
@@ -43,7 +43,8 @@ class Api {
 	 * 添加请求参数
 	 *
 	 * @author Wending <postmaster@g000.cn>
-	 * @param  object $params $this
+	 * @param  array $params 增加请求的参数
+	 * @return [type] [description]
 	 */
 	public function setContent($params = []) {
 		$this->content = $params;
@@ -155,10 +156,13 @@ class Api {
 	 * 重装系统
 	 *
 	 * @author Wending <postmaster@g000.cn>
-	 * @return [type]        [description]
+	 * @param  integer $id 主机ID
+	 * @return [type] [description]
 	 */
-	public function Revert() {
+	public function Revert($id) {
 		$this->setAction('Revert');
+		$this->setContent(compact('id'));
+		return $this->result();
 	}
 
 	/**
